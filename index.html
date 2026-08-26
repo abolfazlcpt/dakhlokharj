@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>دفتر مالی من</title>
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f5f6fa;color:#20242b}
+.container{max-width:900px;margin:auto;padding:24px}.hero{background:#171a21;color:white;border-radius:24px;padding:28px;margin-bottom:18px}
+h1{margin:0 0 8px;font-size:30px}.muted{color:#8f96a3}.hero .muted{color:#c6cad2}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}.card,.panel{background:white;border-radius:18px;padding:18px;box-shadow:0 5px 20px #0000000a}.label{font-size:13px;color:#777}.value{font-size:24px;font-weight:700;margin-top:8px}
+.voice{width:150px;height:150px;border-radius:50%;border:0;background:#20242b;color:white;font-size:20px;cursor:pointer;display:block;margin:12px auto}.voice.listening{background:#b42318;animation:pulse 1s infinite}
+@keyframes pulse{50%{transform:scale(1.04);box-shadow:0 0 0 14px #b4231820}}
+#status{text-align:center;margin:8px 0 18px;color:#666}.preview{background:#f2f3f6;border-radius:14px;padding:14px;min-height:50px;margin-bottom:14px}
+.form{display:grid;grid-template-columns:1fr 1fr auto;gap:10px}.form input,.form select{padding:12px;border:1px solid #ddd;border-radius:12px;font:inherit}.btn{border:0;border-radius:12px;padding:12px 18px;background:#20242b;color:white;cursor:pointer;font:inherit}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.tab{border:1px solid #ddd;background:white;padding:8px 12px;border-radius:20px;cursor:pointer}.tab.active{background:#20242b;color:white}
+.item{display:flex;justify-content:space-between;gap:10px;padding:14px 0;border-bottom:1px solid #eee}.item:last-child{border-bottom:0}.cat{font-size:12px;background:#eef0f4;padding:4px 8px;border-radius:10px}.expense{color:#b42318}.income{color:#067647}
+.empty{text-align:center;color:#888;padding:30px}.small{font-size:12px;color:#777;margin-top:8px}
+@media(max-width:650px){.cards{grid-template-columns:1fr}.form{grid-template-columns:1fr}.container{padding:14px}.hero{padding:20px}}
+</style>
+</head>
+<body>
+<div class="container">
+<section class="hero">
+<h1>دفتر مالی من</h1>
+<div class="muted">فقط بگو چی خریدی یا چقدر پول گرفتی؛ بقیه‌اش با برنامه.</div>
+<button id="voiceBtn" class="voice" type="button">🎙️<br>صحبت کن</button>
+<div id="status">برای شروع روی دکمه بزن و مثلاً بگو: «امروز ۳۵۰ هزار تومان برای شام رستوران خرج کردم»</div>
+<div id="preview" class="preview">هنوز چیزی ثبت نشده.</div>
+<div class="form">
+<input id="amount" type="number" placeholder="مبلغ (تومان)">
+<input id="note" placeholder="توضیح هزینه یا درآمد">
+<select id="type"><option value="expense">هزینه</option><option value="income">درآمد</option></select>
+</div>
+<div style="margin-top:10px;text-align:center"><button class="btn" id="save">ذخیره تراکنش</button></div>
+</section>
+
+<div class="cards">
+<div class="card"><div class="label">موجودی</div><div class="value" id="balance">۰ تومان</div></div>
+<div class="card"><div class="label">کل درآمد</div><div class="value income" id="income">۰ تومان</div></div>
+<div class="card"><div class="label">کل هزینه</div><div class="value expense" id="expense">۰ تومان</div></div>
+</div>
+
+<section class="panel">
+<h2>تراکنش‌ها</h2>
+<div id="tabs" class="tabs"></div>
+<div id="list"></div>
+</section>
+</div>
+
+<script>
+const CATEGORIES=[
+"خوراکی و مواد غذایی","قسط و بدهی","اینترنت و شارژ","نقد","هزینه‌های خودرو","قبض",
+"سلامت و درمان","پوشاک و لوازم شخصی","آرایش و بهداشت","لوازم منزل","کالای دیجیتال",
+"قرض به دیگران","خیریه","تفریح","هزینه مسکن","سرمایه‌گذاری","آموزش","مسافرت","ورزش",
+"هدیه","هزینه برای عشقم"
+];
+
+let tx=JSON.parse(localStorage.getItem("myFinanceTx")||"[]");
+let filter="همه";
+
+const $=id=>document.getElementById(id);
+const fmt=n=>new Intl.NumberFormat("fa-IR").format(Math.round(n||0));
+function normalize(s){return s.toLowerCase().replace(/[يى]/g,"ی").replace(/ك/g,"ک").replace(/‌/g," ").trim()}
+function categorize(text){
+  const t=normalize(text);
+  const rules=[
+   ["خوراکی و مواد غذایی",["رستوران","غذا","ناهار","شام","صبحانه","سوپر","سوپرمارکت","خرید مواد","نان","میوه","گوشت","لبنیات","خوراکی","کافه","قهوه"]],
+   ["قسط و بدهی",["قسط","بدهی","وام"]],
+   ["اینترنت و شارژ",["اینترنت","شارژ","سیم کارت","همراه اول","ایرانسل"]],
+   ["هزینه‌های خودرو",["ماشین","خودرو","تعمیر خودرو","تعویض روغن","لاستیک","پارکینگ","کارواش"]],
+   ["هزینه سوخت",["بنزین","سوخت","گازوئیل","پمپ بنزین"]],
+   ["قبض",["قبض","برق","آب","گاز","تلفن"]],
+   ["سلامت و درمان",["دکتر","پزشک","دارو","داروخانه","درمان","بیمارستان","آزمایش"]],
+   ["پوشاک و لوازم شخصی",["لباس","کفش","پوشاک","کیف","شلوار","پیراهن"]],
+   ["آرایش و بهداشت",["آرایش","بهداشت","شامپو","اصلاح","عطر","ادکلن","کرم"]],
+   ["لوازم منزل",["خانه","لوازم منزل","ظرف","مبل","پرده","وسایل خانه"]],
+   ["کالای دیجیتال",["موبایل","گوشی","لپ تاپ","کامپیوتر","هدفون","هارد","کابل","دیجیتال"]],
+   ["قرض به دیگران",["قرض دادم","قرض به","پول قرض"]],
+   ["خیریه",["خیریه","کمک به","صدقه","نذر"]],
+   ["تفریح",["تفریح","سینما","بازی","پارک","کنسرت"]],
+   ["هزینه مسکن",["اجاره","رهن","مسکن","خانه اجاره","شارژ ساختمان"]],
+   ["سرمایه‌گذاری",["سرمایه گذاری","سرمایه‌گذاری","بورس","سهام","طلا","پس انداز"]],
+   ["آموزش",["کلاس","دوره","آموزش","کتاب","دانشگاه","شهریه"]],
+   ["مسافرت",["سفر","مسافرت","هتل","بلیت","بلیط","هواپیما","قطار"]],
+   ["ورزش",["باشگاه","ورزش","فوتبال","استخر","بدنسازی"]],
+   ["هدیه",["هدیه","کادو"]],
+   ["هزینه برای عشقم",["عشقم","دوست دختر","دوست پسر","همسر","برای عشق"]]
+  ];
+  for(const [cat,words] of rules) if(words.some(w=>t.includes(w))) return cat;
+  return "نقد";
+}
+function extractAmount(s){
+  const persian=s.replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/,/g,"");
+  const m=persian.match(/\d+(?:\.\d+)?/);
+  if(!m)return "";
+  let n=Number(m[0]);
+  if(/هزار/.test(s))n*=1000;
+  if(/میلیون/.test(s))n*=1000000;
+  return n;
+}
+function render(){
+ let inc=tx.filter(x=>x.type==="income").reduce((a,x)=>a+x.amount,0);
+ let exp=tx.filter(x=>x.type==="expense").reduce((a,x)=>a+x.amount,0);
+ $("income").textContent=fmt(inc)+" تومان"; $("expense").textContent=fmt(exp)+" تومان"; $("balance").textContent=fmt(inc-exp)+" تومان";
+ const cats=["همه",...CATEGORIES]; $("tabs").innerHTML=cats.map(c=>`<button class="tab ${c===filter?"active":""}" data-cat="${c}">${c}</button>`).join("");
+ document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{filter=b.dataset.cat;render()});
+ const arr=filter==="همه"?tx:tx.filter(x=>x.category===filter);
+ $("list").innerHTML=arr.length?arr.slice().reverse().map(x=>`<div class="item"><div><b>${escapeHtml(x.note)}</b><div class="small">${x.date} · <span class="cat">${x.category}</span></div></div><strong class="${x.type==="income"?"income":"expense"}">${x.type==="income"?"+":"−"} ${fmt(x.amount)} تومان</strong></div>`).join(""):`<div class="empty">هنوز تراکنشی ثبت نشده.</div>`;
+ localStorage.setItem("myFinanceTx",JSON.stringify(tx));
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+
+function processSpeech(text){
+ $("preview").textContent=text;
+ $("note").value=text;
+ const amount=extractAmount(text); if(amount) $("amount").value=amount;
+ $("type").value=/درآمد|حقوق گرفتم|پول گرفتم|واریز شد|دریافت کردم/.test(normalize(text))?"income":"expense";
+ $("status").textContent="تشخیص دسته: "+categorize(text);
+}
+$("save").onclick=()=>{
+ const amount=Number($("amount").value), note=$("note").value.trim();
+ if(!amount||!note){alert("مبلغ و توضیح را وارد کن.");return}
+ tx.push({amount,note,type:$("type").value,category:categorize(note),date:new Date().toLocaleString("fa-IR")});
+ $("amount").value="";$("note").value="";$("preview").textContent="تراکنش ذخیره شد.";
+ render();
+};
+
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+let rec;
+if(SpeechRecognition){
+ rec=new SpeechRecognition(); rec.lang="fa-IR"; rec.continuous=false; rec.interimResults=false; rec.maxAlternatives=1;
+ rec.onstart=()=>{$("voiceBtn").classList.add("listening");$("voiceBtn").innerHTML="🔴<br>در حال شنیدن";$("status").textContent="دارم گوش می‌دم…"};
+ rec.onresult=e=>processSpeech(e.results[0][0].transcript);
+ rec.onerror=e=>$("status").textContent="خطا در تشخیص صدا: "+e.error;
+ rec.onend=()=>{$("voiceBtn").classList.remove("listening");$("voiceBtn").innerHTML="🎙️<br>صحبت کن"};
+ $("voiceBtn").onclick=()=>{try{rec.start()}catch(e){}};
+}else{
+ $("voiceBtn").onclick=()=>alert("تشخیص صدای مرورگر شما پشتیبانی نمی‌شود. برای نسخه نهایی می‌توانیم تشخیص صدا را با سرویس مستقل پیاده‌سازی کنیم.");
+ $("status").textContent="مرورگر فعلی SpeechRecognition را پشتیبانی نمی‌کند.";
+}
+render();
+</script>
+</body>
+</html>
