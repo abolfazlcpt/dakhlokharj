@@ -9,39 +9,235 @@
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f5f6fa;color:#20242b}
-.container{max-width:900px;margin:auto;padding:24px}
-.hero{background:#171a21;color:white;border-radius:24px;padding:28px;margin-bottom:18px}
-h1{margin:0 0 8px;font-size:30px}
-.muted{color:#8f96a3}
-.hero .muted{color:#c6cad2}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
-.card,.panel{background:white;border-radius:18px;padding:18px;box-shadow:0 5px 20px #0000000a}
-.label{font-size:13px;color:#777}
-.value{font-size:24px;font-weight:700;margin-top:8px}
-.voice{width:150px;height:150px;border-radius:50%;border:0;background:#20242b;color:white;font-size:20px;cursor:pointer;display:block;margin:12px auto}
-.voice.listening{background:#b42318;animation:pulse 1s infinite}
-@keyframes pulse{50%{transform:scale(1.04);box-shadow:0 0 0 14px #b4231820}}
-#status{text-align:center;margin:8px 0 18px;color:#666}
-.preview{background:#f2f3f6;border-radius:14px;padding:14px;min-height:50px;margin-bottom:14px}
-.form{display:grid;grid-template-columns:1fr 1fr auto;gap:10px}
-.form input,.form select{padding:12px;border:1px solid #ddd;border-radius:12px;font:inherit}
-.btn{border:0;border-radius:12px;padding:12px 18px;background:#20242b;color:white;cursor:pointer;font:inherit}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
-.tab{border:1px solid #ddd;background:white;padding:8px 12px;border-radius:20px;cursor:pointer}
-.tab.active{background:#20242b;color:white}
-.item{display:flex;justify-content:space-between;gap:10px;padding:14px 0;border-bottom:1px solid #eee}
-.item:last-child{border-bottom:0}
-.cat{font-size:12px;background:#eef0f4;padding:4px 8px;border-radius:10px}
-.expense{color:#b42318}
-.income{color:#067647}
-.empty{text-align:center;color:#888;padding:30px}
-.small{font-size:12px;color:#777;margin-top:8px}
+
+body{
+  margin:0;
+  font-family:Tahoma,Arial,sans-serif;
+  background:#f5f6fa;
+  color:#20242b
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:24px
+}
+
+.hero{
+  background:#171a21;
+  color:white;
+  border-radius:24px;
+  padding:28px;
+  margin-bottom:18px
+}
+
+h1{
+  margin:0 0 8px;
+  font-size:30px
+}
+
+.muted{
+  color:#8f96a3
+}
+
+.hero .muted{
+  color:#c6cad2
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:18px
+}
+
+.card,.panel{
+  background:white;
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 5px 20px #0000000a
+}
+
+.label{
+  font-size:13px;
+  color:#777
+}
+
+.value{
+  font-size:24px;
+  font-weight:700;
+  margin-top:8px
+}
+
+.voice{
+  width:150px;
+  height:150px;
+  border-radius:50%;
+  border:0;
+  background:#20242b;
+  color:white;
+  font-size:20px;
+  cursor:pointer;
+  display:block;
+  margin:12px auto
+}
+
+.voice.listening{
+  background:#b42318;
+  animation:pulse 1s infinite
+}
+
+@keyframes pulse{
+  50%{
+    transform:scale(1.04);
+    box-shadow:0 0 0 14px #b4231820
+  }
+}
+
+#status{
+  text-align:center;
+  margin:8px 0 18px;
+  color:#666
+}
+
+.preview{
+  background:#f2f3f6;
+  border-radius:14px;
+  padding:14px;
+  min-height:50px;
+  margin-bottom:14px
+}
+
+.form{
+  display:grid;
+  grid-template-columns:1fr 1fr auto;
+  gap:10px
+}
+
+.form input,.form select{
+  padding:12px;
+  border:1px solid #ddd;
+  border-radius:12px;
+  font:inherit
+}
+
+.btn{
+  border:0;
+  border-radius:12px;
+  padding:12px 18px;
+  background:#20242b;
+  color:white;
+  cursor:pointer;
+  font:inherit
+}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:18px 0
+}
+
+.tab{
+  border:1px solid #ddd;
+  background:white;
+  padding:8px 12px;
+  border-radius:20px;
+  cursor:pointer
+}
+
+.tab.active{
+  background:#20242b;
+  color:white
+}
+
+.item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:14px 0;
+  border-bottom:1px solid #eee
+}
+
+.item:last-child{
+  border-bottom:0
+}
+
+.item-info{
+  flex:1
+}
+
+.cat{
+  font-size:12px;
+  background:#eef0f4;
+  padding:4px 8px;
+  border-radius:10px
+}
+
+.expense{
+  color:#b42318
+}
+
+.income{
+  color:#067647
+}
+
+.empty{
+  text-align:center;
+  color:#888;
+  padding:30px
+}
+
+.small{
+  font-size:12px;
+  color:#777;
+  margin-top:8px
+}
+
+/* دکمه حذف */
+
+.delete-btn{
+  border:0;
+  background:#fff0f0;
+  color:#b42318;
+  border-radius:10px;
+  padding:8px 12px;
+  cursor:pointer;
+  font-family:inherit;
+  font-size:13px;
+  white-space:nowrap
+}
+
+.delete-btn:hover{
+  background:#ffe0e0
+}
+
 @media(max-width:650px){
-.cards{grid-template-columns:1fr}
-.form{grid-template-columns:1fr}
-.container{padding:14px}
-.hero{padding:20px}
+
+  .cards{
+    grid-template-columns:1fr
+  }
+
+  .form{
+    grid-template-columns:1fr
+  }
+
+  .container{
+    padding:14px
+  }
+
+  .hero{
+    padding:20px
+  }
+
+  .item{
+    align-items:flex-start
+  }
+
+  .delete-btn{
+    padding:7px 10px
+  }
 }
 </style>
 </head>
@@ -51,8 +247,12 @@ h1{margin:0 0 8px;font-size:30px}
 <div class="container">
 
 <section class="hero">
+
 <h1>دفتر مالی من</h1>
-<div class="muted">فقط بگو چی خریدی یا چقدر پول گرفتی؛ بقیه‌اش با برنامه.</div>
+
+<div class="muted">
+فقط بگو چی خریدی یا چقدر پول گرفتی؛ بقیه‌اش با برنامه.
+</div>
 
 <button id="voiceBtn" class="voice" type="button">
 🎙️<br>صحبت کن
@@ -68,21 +268,38 @@ h1{margin:0 0 8px;font-size:30px}
 </div>
 
 <div class="form">
-<input id="amount" type="number" placeholder="مبلغ (تومان)">
-<input id="note" placeholder="توضیح هزینه یا درآمد">
+
+<input
+id="amount"
+type="number"
+placeholder="مبلغ (تومان)"
+>
+
+<input
+id="note"
+placeholder="توضیح هزینه یا درآمد"
+>
+
 <select id="type">
 <option value="expense">هزینه</option>
 <option value="income">درآمد</option>
 </select>
+
 </div>
 
 <div style="margin-top:10px;text-align:center">
-<button class="btn" id="save">ذخیره تراکنش</button>
+
+<button class="btn" id="save">
+ذخیره تراکنش
+</button>
+
 </div>
 
 </section>
 
+
 <div class="cards">
+
 <div class="card">
 <div class="label">موجودی</div>
 <div class="value" id="balance">۰ تومان</div>
@@ -97,15 +314,22 @@ h1{margin:0 0 8px;font-size:30px}
 <div class="label">کل هزینه</div>
 <div class="value expense" id="expense">۰ تومان</div>
 </div>
+
 </div>
 
+
 <section class="panel">
+
 <h2>تراکنش‌ها</h2>
+
 <div id="tabs" class="tabs"></div>
+
 <div id="list"></div>
+
 </section>
 
 </div>
+
 
 <script>
 
@@ -119,9 +343,10 @@ const SUPABASE_URL =
 const SUPABASE_ANON_KEY =
 "sb_publishable_yr3BIQAa8Vk_yE110Bg1-A_W5udedrN";
 
-const supabaseClient = supabase.createClient(
-SUPABASE_URL,
-SUPABASE_ANON_KEY
+const supabaseClient =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
 );
 
 
@@ -131,16 +356,17 @@ SUPABASE_ANON_KEY
 
 async function checkLogin(){
 
-const { data } = await supabaseClient.auth.getSession();
+  const { data } =
+    await supabaseClient.auth.getSession();
 
-if(!data.session){
+  if(!data.session){
 
-window.location.href = "login.html";
+    window.location.href="login.html";
 
-return false;
-}
+    return false;
+  }
 
-return true;
+  return true;
 }
 
 
@@ -149,6 +375,7 @@ return true;
 ========================= */
 
 const CATEGORIES=[
+
 "خوراکی و مواد غذایی",
 "قسط و بدهی",
 "اینترنت و شارژ",
@@ -170,20 +397,31 @@ const CATEGORIES=[
 "ورزش",
 "هدیه",
 "هزینه برای عشقم"
+
 ];
 
-let tx=JSON.parse(
-localStorage.getItem("myFinanceTx")||"[]"
+
+let tx =
+JSON.parse(
+  localStorage.getItem("myFinanceTx") || "[]"
 );
 
 let filter="همه";
 
-const $=id=>document.getElementById(id);
 
-const fmt=n=>
+const $ =
+id => document.getElementById(id);
+
+
+const fmt =
+n =>
 new Intl.NumberFormat("fa-IR")
-.format(Math.round(n||0));
+.format(Math.round(n || 0));
 
+
+/* =========================
+   NORMALIZE
+========================= */
 
 function normalize(s){
 
@@ -197,6 +435,10 @@ return s
 }
 
 
+/* =========================
+   CATEGORY
+========================= */
+
 function categorize(text){
 
 const t=normalize(text);
@@ -204,112 +446,351 @@ const t=normalize(text);
 const rules=[
 
 ["خوراکی و مواد غذایی",
-["رستوران","غذا","ناهار","شام","صبحانه","سوپر","سوپرمارکت","خرید مواد","نان","میوه","گوشت","لبنیات","خوراکی","کافه","قهوه"]],
+[
+"رستوران",
+"غذا",
+"ناهار",
+"شام",
+"صبحانه",
+"سوپر",
+"سوپرمارکت",
+"خرید مواد",
+"نان",
+"میوه",
+"گوشت",
+"لبنیات",
+"خوراکی",
+"کافه",
+"قهوه"
+]],
 
 ["قسط و بدهی",
-["قسط","بدهی","وام"]],
+[
+"قسط",
+"بدهی",
+"وام"
+]],
 
 ["اینترنت و شارژ",
-["اینترنت","شارژ","سیم کارت","همراه اول","ایرانسل"]],
+[
+"اینترنت",
+"شارژ",
+"سیم کارت",
+"همراه اول",
+"ایرانسل"
+]],
 
 ["هزینه‌های خودرو",
-["ماشین","خودرو","تعمیر خودرو","تعویض روغن","لاستیک","پارکینگ","کارواش"]],
+[
+"ماشین",
+"خودرو",
+"تعمیر خودرو",
+"تعویض روغن",
+"لاستیک",
+"پارکینگ",
+"کارواش"
+]],
 
 ["قبض",
-["قبض","برق","آب","گاز","تلفن"]],
+[
+"قبض",
+"برق",
+"آب",
+"گاز",
+"تلفن"
+]],
 
 ["سلامت و درمان",
-["دکتر","پزشک","دارو","داروخانه","درمان","بیمارستان","آزمایش"]],
+[
+"دکتر",
+"پزشک",
+"دارو",
+"داروخانه",
+"درمان",
+"بیمارستان",
+"آزمایش"
+]],
 
 ["پوشاک و لوازم شخصی",
-["لباس","کفش","پوشاک","کیف","شلوار","پیراهن"]],
+[
+"لباس",
+"کفش",
+"پوشاک",
+"کیف",
+"شلوار",
+"پیراهن"
+]],
 
 ["آرایش و بهداشت",
-["آرایش","بهداشت","شامپو","اصلاح","عطر","ادکلن","کرم"]],
+[
+"آرایش",
+"بهداشت",
+"شامپو",
+"اصلاح",
+"عطر",
+"ادکلن",
+"کرم"
+]],
 
 ["لوازم منزل",
-["خانه","لوازم منزل","ظرف","مبل","پرده","وسایل خانه"]],
+[
+"خانه",
+"لوازم منزل",
+"ظرف",
+"مبل",
+"پرده",
+"وسایل خانه"
+]],
 
 ["کالای دیجیتال",
-["موبایل","گوشی","لپ تاپ","کامپیوتر","هدفون","هارد","کابل","دیجیتال"]],
+[
+"موبایل",
+"گوشی",
+"لپ تاپ",
+"کامپیوتر",
+"هدفون",
+"هارد",
+"کابل",
+"دیجیتال"
+]],
 
 ["قرض به دیگران",
-["قرض دادم","قرض به","پول قرض"]],
+[
+"قرض دادم",
+"قرض به",
+"پول قرض"
+]],
 
 ["خیریه",
-["خیریه","کمک به","صدقه","نذر"]],
+[
+"خیریه",
+"کمک به",
+"صدقه",
+"نذر"
+]],
 
 ["تفریح",
-["تفریح","سینما","بازی","پارک","کنسرت"]],
+[
+"تفریح",
+"سینما",
+"بازی",
+"پارک",
+"کنسرت"
+]],
 
 ["هزینه مسکن",
-["اجاره","رهن","مسکن","خانه اجاره","شارژ ساختمان"]],
+[
+"اجاره",
+"رهن",
+"مسکن",
+"خانه اجاره",
+"شارژ ساختمان"
+]],
 
 ["سرمایه‌گذاری",
-["سرمایه گذاری","سرمایه‌گذاری","بورس","سهام","طلا","پس انداز"]],
+[
+"سرمایه گذاری",
+"سرمایه‌گذاری",
+"بورس",
+"سهام",
+"طلا",
+"پس انداز"
+]],
 
 ["آموزش",
-["کلاس","دوره","آموزش","کتاب","دانشگاه","شهریه"]],
+[
+"کلاس",
+"دوره",
+"آموزش",
+"کتاب",
+"دانشگاه",
+"شهریه"
+]],
 
 ["مسافرت",
-["سفر","مسافرت","هتل","بلیت","بلیط","هواپیما","قطار"]],
+[
+"سفر",
+"مسافرت",
+"هتل",
+"بلیت",
+"بلیط",
+"هواپیما",
+"قطار"
+]],
 
 ["ورزش",
-["باشگاه","ورزش","فوتبال","استخر","بدنسازی"]],
+[
+"باشگاه",
+"ورزش",
+"فوتبال",
+"استخر",
+"بدنسازی"
+]],
 
 ["هدیه",
-["هدیه","کادو"]],
+[
+"هدیه",
+"کادو"
+]],
 
 ["هزینه برای عشقم",
-["عشقم","دوست دختر","دوست پسر","همسر","برای عشق"]]
+[
+"عشقم",
+"دوست دختر",
+"دوست پسر",
+"همسر",
+"برای عشق"
+]]
 
 ];
 
-for(const [cat,words] of rules)
 
-if(words.some(w=>t.includes(w)))
+for(
+const [cat,words] of rules
+){
+
+if(
+words.some(
+w=>t.includes(w)
+)
+){
 
 return cat;
+
+}
+
+}
 
 return "نقد";
 
 }
 
 
+/* =========================
+   EXTRACT AMOUNT
+========================= */
+
 function extractAmount(s){
 
-const persian=s
-.replace(/[۰-۹]/g,
-d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d))
+const persian =
+s
+.replace(
+/[۰-۹]/g,
+d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)
+)
 .replace(/,/g,"");
 
-const m=persian.match(/\d+(?:\.\d+)?/);
+const m =
+persian.match(
+/\d+(?:\.\d+)?/
+);
 
 if(!m)return "";
 
 let n=Number(m[0]);
 
-if(/هزار/.test(s))n*=1000;
+if(/هزار/.test(s))
+n*=1000;
 
-if(/میلیون/.test(s))n*=1000000;
+if(/میلیون/.test(s))
+n*=1000000;
 
 return n;
 
 }
 
 
+/* =========================
+   ESCAPE HTML
+========================= */
+
 function escapeHtml(s){
 
-return String(s).replace(
+return String(s)
+.replace(
 /[&<>"']/g,
+
 m=>({
+
 "&":"&amp;",
 "<":"&lt;",
 ">":"&gt;",
 '"':"&quot;",
 "'":"&#039;"
+
 }[m])
+
 );
+
+}
+
+
+/* =========================
+   DELETE TRANSACTION
+========================= */
+
+function deleteTransaction(index){
+
+const confirmed =
+confirm(
+"آیا مطمئنی می‌خواهی این تراکنش را حذف کنی؟"
+);
+
+if(!confirmed)return;
+
+
+/*
+  چون لیست برعکس نمایش داده می‌شود،
+  index مربوط به آرایه‌ی نمایش داده شده است.
+*/
+
+const arr =
+filter==="همه"
+?tx
+:tx.filter(
+x=>x.category===filter
+);
+
+const transaction =
+arr
+.slice()
+.reverse()[index];
+
+if(!transaction)return;
+
+
+/*
+  پیدا کردن تراکنش واقعی
+*/
+
+const realIndex =
+tx.indexOf(transaction);
+
+if(realIndex===-1)return;
+
+
+/*
+  حذف
+*/
+
+tx.splice(realIndex,1);
+
+
+/*
+  ذخیره مجدد
+*/
+
+localStorage.setItem(
+"myFinanceTx",
+JSON.stringify(tx)
+);
+
+
+/*
+  نمایش مجدد
+*/
+
+render();
 
 }
 
@@ -320,73 +801,125 @@ m=>({
 
 function render(){
 
-let inc=tx
-.filter(x=>x.type==="income")
-.reduce((a,x)=>a+x.amount,0);
+let inc =
+tx
+.filter(
+x=>x.type==="income"
+)
+.reduce(
+(a,x)=>a+x.amount,
+0
+);
 
-let exp=tx
-.filter(x=>x.type==="expense")
-.reduce((a,x)=>a+x.amount,0);
 
-$("income").textContent=
+let exp =
+tx
+.filter(
+x=>x.type==="expense"
+)
+.reduce(
+(a,x)=>a+x.amount,
+0
+);
+
+
+$("income").textContent =
 fmt(inc)+" تومان";
 
-$("expense").textContent=
+$("expense").textContent =
 fmt(exp)+" تومان";
 
-$("balance").textContent=
+$("balance").textContent =
 fmt(inc-exp)+" تومان";
 
 
-const cats=["همه",...CATEGORIES];
+/*
+  دسته‌ها
+*/
 
-$("tabs").innerHTML=cats
-.map(c=>`
+const cats =
+["همه",...CATEGORIES];
+
+
+$("tabs").innerHTML =
+cats
+.map(
+c=>`
+
 <button
 class="tab ${c===filter?"active":""}"
 data-cat="${c}">
 ${c}
 </button>
-`)
+
+`
+)
 .join("");
 
 
 document
 .querySelectorAll(".tab")
-.forEach(b=>
+.forEach(
+b=>{
 
 b.onclick=()=>{
-filter=b.dataset.cat;
-render();
-}
 
+filter=
+b.dataset.cat;
+
+render();
+
+};
+
+}
 );
 
 
-const arr=
+/*
+  تراکنش‌ها
+*/
+
+const arr =
 filter==="همه"
 ?tx
-:tx.filter(x=>x.category===filter);
+:tx.filter(
+x=>x.category===filter
+);
 
 
-$("list").innerHTML=
+if(!arr.length){
 
-arr.length
+$("list").innerHTML =
+`
+<div class="empty">
+هنوز تراکنشی ثبت نشده.
+</div>
+`;
 
-?arr
+return;
+
+}
+
+
+$("list").innerHTML =
+arr
 .slice()
 .reverse()
-.map(x=>`
+.map(
+(x,index)=>`
 
 <div class="item">
 
-<div>
+<div class="item-info">
 
-<b>${escapeHtml(x.note)}</b>
+<b>
+${escapeHtml(x.note)}
+</b>
 
 <div class="small">
 
-${x.date} ·
+${x.date}
+·
 
 <span class="cat">
 ${x.category}
@@ -396,26 +929,37 @@ ${x.category}
 
 </div>
 
+
 <strong
 class="${x.type==="income"?"income":"expense"}">
 
 ${x.type==="income"?"+":"−"}
+
 ${fmt(x.amount)}
+
 تومان
 
 </strong>
 
+
+<button
+class="delete-btn"
+onclick="deleteTransaction(${index})">
+
+🗑️ حذف
+
+</button>
+
 </div>
 
-`)
-.join("")
+`
+)
+.join("");
 
-:
 
-`<div class="empty">
-هنوز تراکنشی ثبت نشده.
-</div>`;
-
+/*
+  ذخیره
+*/
 
 localStorage.setItem(
 "myFinanceTx",
@@ -431,17 +975,23 @@ JSON.stringify(tx)
 
 $("save").onclick=()=>{
 
-const amount=
-Number($("amount").value);
+const amount =
+Number(
+$("amount").value
+);
 
-const note=
+const note =
 $("note").value.trim();
 
-if(!amount||!note){
 
-alert("مبلغ و توضیح را وارد کن.");
+if(!amount || !note){
+
+alert(
+"مبلغ و توضیح را وارد کن."
+);
 
 return;
+
 }
 
 
@@ -451,11 +1001,14 @@ amount,
 
 note,
 
-type:$("type").value,
+type:
+$("type").value,
 
-category:categorize(note),
+category:
+categorize(note),
 
-date:new Date()
+date:
+new Date()
 .toLocaleString("fa-IR")
 
 });
@@ -465,8 +1018,9 @@ $("amount").value="";
 
 $("note").value="";
 
-$("preview").textContent=
+$("preview").textContent =
 "تراکنش ذخیره شد.";
+
 
 render();
 
@@ -477,15 +1031,17 @@ render();
    VOICE
 ========================= */
 
-const SpeechRecognition=
-window.SpeechRecognition||
+const SpeechRecognition =
+window.SpeechRecognition ||
 window.webkitSpeechRecognition;
 
 let rec;
 
+
 if(SpeechRecognition){
 
-rec=new SpeechRecognition();
+rec =
+new SpeechRecognition();
 
 rec.lang="fa-IR";
 
@@ -499,12 +1055,14 @@ rec.maxAlternatives=1;
 rec.onstart=()=>{
 
 $("voiceBtn")
-.classList.add("listening");
+.classList.add(
+"listening"
+);
 
-$("voiceBtn").innerHTML=
+$("voiceBtn").innerHTML =
 "🔴<br>در حال شنیدن";
 
-$("status").textContent=
+$("status").textContent =
 "دارم گوش می‌دم…";
 
 };
@@ -512,35 +1070,50 @@ $("status").textContent=
 
 rec.onresult=e=>{
 
-const text=
-e.results[0][0].transcript;
+const text =
+e.results[0][0]
+.transcript;
 
-$("preview").textContent=text;
 
-$("note").value=text;
+$("preview").textContent =
+text;
 
-const amount=
+$("note").value =
+text;
+
+
+const amount =
 extractAmount(text);
 
-if(amount)
-$("amount").value=amount;
 
-$("type").value=
+if(amount)
+$("amount").value =
+amount;
+
+
+$("type").value =
+
 /درآمد|حقوق گرفتم|پول گرفتم|واریز شد|دریافت کردم/
-.test(normalize(text))
+.test(
+normalize(text)
+)
+
 ?"income"
 :"expense";
 
-$("status").textContent=
-"تشخیص دسته: "+categorize(text);
+
+$("status").textContent =
+"تشخیص دسته: "+
+categorize(text);
 
 };
 
 
 rec.onerror=e=>{
 
-$("status").textContent=
-"خطا در تشخیص صدا: "+e.error;
+$("status").textContent =
+"خطا در تشخیص صدا: "+
+e.error;
 
 };
 
@@ -548,9 +1121,11 @@ $("status").textContent=
 rec.onend=()=>{
 
 $("voiceBtn")
-.classList.remove("listening");
+.classList.remove(
+"listening"
+);
 
-$("voiceBtn").innerHTML=
+$("voiceBtn").innerHTML =
 "🎙️<br>صحبت کن";
 
 };
@@ -566,6 +1141,7 @@ rec.start();
 
 };
 
+
 }else{
 
 $("voiceBtn").onclick=()=>{
@@ -576,7 +1152,8 @@ alert(
 
 };
 
-$("status").textContent=
+
+$("status").textContent =
 "مرورگر فعلی SpeechRecognition را پشتیبانی نمی‌کند.";
 
 }
@@ -588,7 +1165,8 @@ $("status").textContent=
 
 (async()=>{
 
-const loggedIn=await checkLogin();
+const loggedIn =
+await checkLogin();
 
 if(loggedIn){
 
